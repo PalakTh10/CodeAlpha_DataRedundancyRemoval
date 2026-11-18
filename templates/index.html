@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DataVault | Student Management</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header">
+
+        <div class="brand">
+            <div class="brand-icon">D</div>
+
+            <div>
+                <h2>DataVault</h2>
+                <p>Student Database Management</p>
+            </div>
+        </div>
+
+        <div class="cloud-status">
+            <span class="status-dot"></span>
+            Cloud {{ firestore_status }}
+        </div>
+
+    </header>
+
+
+    <!-- Page Heading -->
+    <section class="welcome">
+        
+
+        <h1>Student Management</h1>
+
+        <p>A modern platform to manage student information securely.</p>
+    </section>
+
+
+    <!-- Statistics -->
+    <section class="stats-grid">
+
+        <div class="stat-card students-card">
+            <div class="stat-top">
+                <span>Total Students</span>
+                <div class="stat-icon">♙</div>
+            </div>
+
+            <h2>{{ students|length }}</h2>
+            <p>Registered student records</p>
+        </div>
+
+
+        <div class="stat-card duplicate-card">
+            <div class="stat-top">
+                <span>Duplicate Attempts</span>
+                <div class="stat-icon">↻</div>
+            </div>
+
+            <h2>{{ duplicate_attempts }}</h2>
+            <p>Duplicate registrations prevented</p>
+        </div>
+
+
+        <div class="stat-card firestore-card">
+            <div class="stat-top">
+                <span>Firestore Status</span>
+                <div class="stat-icon">☁</div>
+            </div>
+
+            <h2 class="live-status">{{ firestore_status }}</h2>
+            <p>Cloud database connection</p>
+        </div>
+
+    </section>
+
+
+    <!-- Flash Messages -->
+    <div class="messages">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="message {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+    </div>
+
+
+    <!-- Registration Form -->
+    <section class="card">
+
+        <div class="section-heading">
+            <div class="heading-icon purple">＋</div>
+
+            <div>
+                <h2>Register New Student</h2>
+                
+            </div>
+        </div>
+
+
+        <form action="{{ url_for('add_student_route') }}"
+              method="POST"
+              autocomplete="off">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="student_id">Student ID</label>
+
+                    <input
+                        type="text"
+                        id="student_id"
+                        name="student_id"
+                        placeholder="e.g. ST07"
+                        autocomplete="off"
+                        required>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="name">Student Name</label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter student name"
+                        autocomplete="off"
+                        required>
+                </div>
+
+
+                <div class="form-group full-width">
+                    <label for="email">Email Address</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter email address"
+                        autocomplete="off"
+                        required>
+                </div>
+
+            </div>
+
+
+            <button type="submit" class="add-button">
+                + Add Student
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- Student Records -->
+    <section class="card records-card">
+
+        <div class="section-heading">
+
+            <div class="heading-icon blue">▤</div>
+
+            <div>
+                <h2>Student Records</h2>
+                
+            </div>
+
+            <span class="record-count">
+                {{ students|length }} Records
+            </span>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>STUDENT ID</th>
+                        <th>STUDENT NAME</th>
+                        <th>EMAIL ADDRESS</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    {% for student in students %}
+
+                    <tr>
+
+                        <td>
+                            <span class="student-id">
+                                {{ student[0] }}
+                            </span>
+                        </td>
+
+                        <td class="student-name">
+                            {{ student[1] }}
+                        </td>
+
+                        <td class="student-email">
+                            {{ student[2] }}
+                        </td>
+
+                        <td>
+
+                            <form
+                                action="{{ url_for('delete_student_route') }}"
+                                method="POST"
+                                onsubmit="return confirm('Are you sure you want to delete this student?');">
+
+                                <input
+                                    type="hidden"
+                                    name="student_id"
+                                    value="{{ student[0] }}">
+
+                                <button type="submit"
+                                        class="delete-button">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="4" class="empty-message">
+                            No student records available. Add your first student!
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+        <h3>DataVault</h3>
+        <p>Data Redundancy Removal System</p>
+        <p>CodeAlpha Cloud Computing Internship Project</p>
+        
+    </footer>
+
+</div>
+
+</body>
+</html>
