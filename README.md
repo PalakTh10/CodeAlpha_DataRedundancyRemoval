@@ -95,3 +95,21 @@ Developed as part of the CodeAlpha Cloud Computing Internship.
 Palak Thakur
 
 GitHub: https://github.com/PalakTh10
+
+
+## Project Screenshots
+
+### Main Dashboard
+![DataVault Dashboard](screenshorts/dashboard1.png)
+
+### Dashboard – Student Records
+![Student Records](screenshorts/dashboard2.png)
+
+### Add Student
+![Add Student](screenshorts/add-student.png)
+
+### Duplicate Prevention
+![Duplicate Prevention](screenshorts/duplicate-prevention.png)
+
+### Delete Student
+![Delete Student](screenshorts/delete-student1.png)
